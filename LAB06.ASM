@@ -16,8 +16,8 @@ codesg segment
 read:
     mov ah, 01h
     int 21h
-    cmp al, 0dh 
-    jz quit   ; 如果回车就退出
+    cmp al, 1bh 
+    jz quit   ; escape
 
 play:
     mov cx, 21 ;循环计算器  循环21次
@@ -52,7 +52,7 @@ play:
     mov al, 03h
     out dx, al
     ; delay 两层循环空转
-    mov AX, 12H ;可修改0000~0FFFFH之内 越大延时越高
+    mov AX, 10H ;可修改0000~0FFFFH之内 越大延时越高
     rep2:
     mov CX, 0FFFFH
     rep1:
@@ -75,6 +75,14 @@ start:
     jmp loop1
     ; exit
   quit:
+    ; output CR (\r)
+    mov dl,0dh
+    mov ah,02h
+    int 21h
+    ; output LF (\n)
+    mov dl,0ah
+    mov ah,02h
+    int 21h
     mov ax, 4c00h
     int 21h   
 codesg ends
