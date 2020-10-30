@@ -1,4 +1,3 @@
-
 assume cs:code
 ; 按键和频率相对应
 data segment
