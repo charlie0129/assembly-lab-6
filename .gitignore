@@ -1,4 +1,10 @@
-.DS_Store
-*.OBJ
-LAB06.EXE
-*.LST
+/*
+**/.DS_Store
+!.gitignore
+!README.md
+!DMAKE.BAT
+!LAB06.ASM
+!LINK.EXE
+!MASM.EXE
+!NMAKE.BAT
+!README.md
