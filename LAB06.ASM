@@ -43,7 +43,7 @@ play:
     mov dx, 43h  
     mov al, 0b6h 
     out dx, al
-    ; 定义基准频率：122870H,高四位存在bx中，低四位存在ax中
+    ; 定义基准频率：122870H,高四位存在dx中，低四位存在ax中
     mov ax, 2870h
     mov dx, 0012h
     ; 除法计算，将基准频率与data段找到的要播放的频率值相除
