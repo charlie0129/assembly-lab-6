@@ -1,0 +1,26 @@
+@echo off
+REM Assembly 'make' in MS-DOS batch by Charlie Chiang
+
+IF "%1"=="clean" GOTO CLEAN
+IF "%1"=="run" GOTO RUN
+IF "%1"=="" GOTO COMPILE
+GOTO DONE
+
+:COMPILE
+MASM LAB06.ASM;
+LINK LAB06.OBJ;
+GOTO DONE
+
+:RUN
+MASM LAB06.ASM;
+LINK LAB06.OBJ;
+LAB06.EXE
+GOTO DONE
+
+:CLEAN
+DEL LAB06.OBJ 2>nul
+DEL LAB06.EXE 2>nul
+DEL LAB06.LST 2>nul
+GOTO DONE
+
+:DONE
