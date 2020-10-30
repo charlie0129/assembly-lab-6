@@ -1,4 +1,4 @@
-# assembly-expr-6
+# assembly-lab-6
 
 ### Windows:
 - Compile: `nmake`
