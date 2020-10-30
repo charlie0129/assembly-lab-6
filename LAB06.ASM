@@ -41,7 +41,7 @@ play:
     ;dx-端口号,原PC机端口43H，实验箱为283H
     ;al-控制字,原PC机为0b6h，实验箱为36h（00110110b）
     mov dx, 43h  
-    mov al, 0b6h 
+    mov al, 0b6h
     out dx, al
     ; 定义基准频率：122870H,高四位存在dx中，低四位存在ax中
     mov ax, 2870h
