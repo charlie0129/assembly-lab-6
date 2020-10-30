@@ -34,7 +34,7 @@ play:
     inc di              ; 否则di+1， si+2
     add si, 2           
     loop choosekey      ; 循环回开头，尝试匹配下一个
-    jmp loop1           ; 如果输入的是其他字符，重新回到读入部分
+    jmp mainloop           ; 如果输入的是其他字符，重新回到读入部分
   
   ; 输出声音
   output:
@@ -55,14 +55,14 @@ play:
     ; 原PC机：42H，实验箱：280H
     mov dx, 42h ; 定义端口
     out dx, al ;分两次输出到端口，先是低四位al
-    mov bl, ah ;将高四位转移到bx的低四位
-    out dx, bl ;输出高四位到端口
+    mov al, ah ;将高四位转移到al的低四位
+    out dx, al ;输出高四位到端口
 
     ; 输出声音：
     ; 输出到实验箱，端口28bh，控制码80h
     mov dx, 28bh
     mov al, 10000000b
-    out dx, alb
+    out dx, al
     ; 输出到PC机，端口61h，控制码03h
     mov dx, 61h
     mov al, 00000011b
