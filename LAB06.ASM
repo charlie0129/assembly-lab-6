@@ -5,6 +5,7 @@ data segment
               dw 262, 294, 330, 349, 392, 440, 494
               dw 524, 587, 659, 698, 784, 880, 988
     keys      db "zxcvbnmasdfghjqwertyu"
+    ; 《牢不可破的联盟》
     ussrkeys  db "qqqqqqqq ggqqqqggghjjjjddddhhhhgggfggggaaaassssssddffffffgghhhhjjqqwwwwww "
               db "ggeeeewwwqwwwwjjggqqqqjjjhjjjjddddhhhhggffggggaaaaqqqqjjjhgggggg "
               db "eeeeeeeewwqqjjqqwwwww g ggggggg qqqqqqqqjjhhgghhjjjjj d ddddddd qqq "
@@ -31,11 +32,11 @@ start:
   quit:
     ; 按下esc键以后
     ; 打印一个换行，然后结束程序
-    ; output CR (\r)
+    ; CR (\r)
     mov dl,0dh
     mov ah,02h
     int 21h
-    ; output LF (\n)
+    ; LF (\n)
     mov dl,0ah
     mov ah,02h
     int 21h
@@ -50,6 +51,7 @@ read proc
 ; 如果读入的是esc键，跳转到退出部分
     cmp al, 1bh 
     jz quit
+    ; 如果读入回车，播放《牢不可破的联盟》
     cmp al, 0dh
     jz ussrjp
     ret
@@ -68,7 +70,7 @@ play proc
   choosekey:
     cmp al, ds:keys[di] ; key数据值与读入的键盘码(al)比较    
     jz output           ; 若匹配则进入输出部分
-    cmp al, 20h
+    cmp al, 20h         ; 如果是空格则延时
     jz delay
     inc di              ; 否则di+1， si+2
     add si, 2           
@@ -127,8 +129,8 @@ play proc
     pop cx
     ret
 
+    ; 空格延时
     delay:
-    ; 设置延时
     mov ah, 00h 
     int 1ah    ; 召唤一次时钟中断（约55ms）
     mov bp, 1  ; 更改此计数器以改变延时的时间（bp*55ms），约18次为1秒
@@ -147,6 +149,7 @@ play endp
 ussr proc
   mov cx, len
   mov si, 0
+  ; 播放《牢不可破的联盟》中所有音符
   ussrloop:
   mov al, ds:ussrkeys[si]
   call play
