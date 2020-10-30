@@ -13,9 +13,6 @@ stack ends
 
 code segment
 
-
-
-
 start:
     ; 设置data段基址
     mov ax, data
@@ -78,7 +75,7 @@ play proc
     ; 结果存放在ax中
     div word ptr ds:frequency[si] 
 
-    ; 将计算结果存入2号计时器的计数常熟寄存器端口
+    ; 将计算结果存入2号计时器的计数常数寄存器端口
     ; 原PC机：42H，实验箱：280H
     mov dx, 42h ; 定义端口
     out dx, al ;分两次输出到端口，先是低四位al
