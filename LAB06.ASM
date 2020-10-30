@@ -5,7 +5,11 @@ data segment
               dw 262, 294, 330, 349, 392, 440, 494
               dw 524, 587, 659, 698, 784, 880, 988
     keys      db "zxcvbnmasdfghjqwertyu"
-    ussrkeys  db "qqqqqqqq ggqqqqggghjjjjddddhhhhgggfggggaaaassssssddffffffgghhhhjjqqwwwwww ggeeeewwwqwwwwjjggqqqqjjjhjjjjddddhhhhggffggggaaaaqqqqjjjhgggggg"
+    ussrkeys  db "qqqqqqqq ggqqqqggghjjjjddddhhhhgggfggggaaaassssssddffffffgghhhhjjqqwwwwww "
+              db "ggeeeewwwqwwwwjjggqqqqjjjhjjjjddddhhhhggffggggaaaaqqqqjjjhgggggg "
+              db "eeeeeeeewwqqjjqqwwwww g ggggggg qqqqqqqqjjhhgghhjjjjj d ddddddd qqq "
+              db "hh jqqq hh jqqq hhqqrrrrr  rrrrrr  eewwqqwweeeee q qqqqqq  wwwwww  "
+              db "qqjjhhjjqqqqq h hhhhhh  qqq jjhhggggaaaaggggggghhhhjjjjqqqqqqqqqq"
     len equ $-ussrkeys
 data ends
 
