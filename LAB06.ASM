@@ -13,16 +13,44 @@ stack ends
 
 code segment
 
+
+
+
+start:
+    ; 设置data段基址
+    mov ax, data
+    mov ds, ax
+  mainloop:
+    ; 开始读和播放主循环
+    call read
+    call play
+    jmp mainloop
+  quit:
+    ; 按下esc键以后
+    ; 打印一个换行，然后结束程序
+    ; output CR (\r)
+    mov dl,0dh
+    mov ah,02h
+    int 21h
+    ; output LF (\n)
+    mov dl,0ah
+    mov ah,02h
+    int 21h
+    mov ax, 4c00h
+    int 21h   
+  
 ; 读入键盘输入部分
-read:
+read proc
 ; 从键盘上读取一个输入ascii码到al，并打印到屏幕上
     mov ah, 01h 
     int 21h
 ; 如果读入的是esc键，跳转到退出部分
     cmp al, 1bh 
-    jz quit   
+    jz quit
+    ret
+read endp
 
-play:
+play proc
     mov cx, 21 ;设置cx循环21次，因为要比较21个字符
     mov di, 0  ;设置di存储指向keys数据段的指针
     mov si, 0  ;设置si存储指向freq数据段的指针
@@ -83,29 +111,9 @@ play:
     and al, 00h ; 重置控制码为0
     mov dx, 61h
     out dx, al
+    ret
+play endp
 
-start:
-    ; 设置data段基址
-    mov ax, data
-    mov ds, ax
-  mainloop:
-    ; 开始读和播放主循环
-    call read
-    call play
-    jmp mainloop
-  quit:
-    ; 按下esc键以后
-    ; 打印一个换行，然后结束程序
-    ; output CR (\r)
-    mov dl,0dh
-    mov ah,02h
-    int 21h
-    ; output LF (\n)
-    mov dl,0ah
-    mov ah,02h
-    int 21h
-    mov ax, 4c00h
-    int 21h   
 code ends
 
 end start
