@@ -71,7 +71,7 @@ play:
     ; 设置延时
     mov ah, 00h 
     int 1ah    ; 召唤一次时钟中断（约55ms）
-    mov bp, 9  ; 更改此计数器以改变延时的时间（bp*55ms），约18次为1秒
+    mov bp, 4  ; 更改此计数器以改变延时的时间（bp*55ms），约18次为1秒
     mov bx, dx ; 返回时间计数器的低位，存入bx
   delaylop:
     mov ah, 00h
