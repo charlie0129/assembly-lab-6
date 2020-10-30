@@ -5,6 +5,8 @@ data segment
               dw 262, 294, 330, 349, 392, 440, 494
               dw 524, 587, 659, 698, 784, 880, 988
     keys      db "zxcvbnmasdfghjqwertyu"
+    ussrkeys  db "qqqqqqqq ggqqqqggghjjjjddddhhhhgggfggggaaaassssssddffffffgghhhhjjqqwwwwww ggeeeewwwqwwwwjjggqqqqjjjhjjjjddddhhhhggffggggaaaaqqqqjjjhgggggg"
+    len equ $-ussrkeys
 data ends
 
 stack segment stack
@@ -44,10 +46,17 @@ read proc
 ; 如果读入的是esc键，跳转到退出部分
     cmp al, 1bh 
     jz quit
+    cmp al, 0dh
+    jz ussrjp
+    ret
+    ussrjp:
+    call ussr
     ret
 read endp
 
 play proc
+    push cx
+    push si
     mov cx, 21 ;设置cx循环21次，因为要比较21个字符
     mov di, 0  ;设置di存储指向keys数据段的指针
     mov si, 0  ;设置si存储指向freq数据段的指针
@@ -55,6 +64,8 @@ play proc
   choosekey:
     cmp al, ds:keys[di] ; key数据值与读入的键盘码(al)比较    
     jz output           ; 若匹配则进入输出部分
+    cmp al, 20h
+    jz delay
     inc di              ; 否则di+1， si+2
     add si, 2           
     loop choosekey      ; 循环回开头，尝试匹配下一个
@@ -95,7 +106,7 @@ play proc
     ; 设置延时
     mov ah, 00h 
     int 1ah    ; 召唤一次时钟中断（约55ms）
-    mov bp, 4  ; 更改此计数器以改变延时的时间（bp*55ms），约18次为1秒
+    mov bp, 2  ; 更改此计数器以改变延时的时间（bp*55ms），约18次为1秒
     mov bx, dx ; 返回时间计数器的低位，存入bx
   delaylop:
     mov ah, 00h
@@ -108,8 +119,37 @@ play proc
     and al, 00h ; 重置控制码为0
     mov dx, 61h
     out dx, al
+    pop si
+    pop cx
+    ret
+
+    delay:
+    ; 设置延时
+    mov ah, 00h 
+    int 1ah    ; 召唤一次时钟中断（约55ms）
+    mov bp, 1  ; 更改此计数器以改变延时的时间（bp*55ms），约18次为1秒
+    mov bx, dx ; 返回时间计数器的低位，存入bx
+  delaylop2:
+    mov ah, 00h
+    int 1ah    ; 再次召唤时钟中断
+    sub dx, bx ; 返回的时钟计数器值减去存储的值,即为调用时钟中断的次数
+    cmp dx, bp ; 如果次数没有到达设定的次数，继续循环
+    jbe delaylop2
+    pop si
+    pop cx
     ret
 play endp
+
+ussr proc
+  mov cx, len
+  mov si, 0
+  ussrloop:
+  mov al, ds:ussrkeys[si]
+  call play
+  inc si
+  loop ussrloop
+  ret
+ussr endp
 
 code ends
 
