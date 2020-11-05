@@ -6,7 +6,7 @@ data segment
               dw 524, 587, 659, 698, 784, 880, 988
     keys      db "zxcvbnmasdfghjqwertyu"
     ; 《牢不可破的联盟》
-    ussrkeys  db "qqqqqqqq ggqqqqggghjjjjddddhhhhgggfggggaaaassssssddffffffgghhhhjjqqwwwwww "
+    ussrkeys  db "qqqqqqqqqqqq ggqqqqggghjjjjddddhhhhgggfggggaaaassssssddffffffgghhhhjjqqwwwwww "
               db "ggeeeewwwqwwwwjjggqqqqjjjhjjjjddddhhhhggffggggaaaaqqqqjjjhgggggg "
               db "eeeeeeeewwqqjjqqwwwww g ggggggg qqqqqqqqjjhhgghhjjjjj d ddddddd qqq "
               db "hh jqqq hh jqqq hhqqrrrrr  rrrrrr  eewwqqwweeeee q qqqqqq  wwwwww  "
@@ -80,10 +80,10 @@ play proc
   ; 输出声音
   output:
     ;初始化8254的2号定时器
-    ;dx-端口号,原PC机端口43H，实验箱为283H
+    ;dx-端口号,原PC机端口43H，实验箱为283H 
     ;al-控制字,原PC机为0b6h，实验箱为36h（00110110b）
-    mov dx, 43h  
-    mov al, 0b6h
+    mov dx, 43h  ; <==========
+    mov al, 0b6h ; <==========
     out dx, al
     ; 定义基准频率：122870H,高四位存在dx中，低四位存在ax中
     mov ax, 2870h
@@ -94,7 +94,7 @@ play proc
 
     ; 将计算结果存入2号计时器的计数常数寄存器端口
     ; 原PC机：42H，实验箱：280H
-    mov dx, 42h ; 定义端口
+    mov dx, 42h ; 定义端口 ; <==========
     out dx, al ;分两次输出到端口，先是低四位al
     mov al, ah ;将高四位转移到al的低四位
     out dx, al ;输出高四位到端口
@@ -105,8 +105,9 @@ play proc
     mov al, 10000000b
     out dx, al
     ; 输出到PC机，端口61h，控制码03h
-    mov dx, 61h
-    mov al, 00000011b
+    ; 试验箱，端口288h
+    mov dx, 61h  ; <==========
+    mov al, 03h
     out dx, al
 
     ; 设置延时
@@ -123,7 +124,9 @@ play proc
 
     ; 停止播放
     and al, 00h ; 重置控制码为0
-    mov dx, 61h
+    ; 输出到PC机，端口61h，控制码03h
+    ; 试验箱，端口288h
+    mov dx, 61h  ; <==========
     out dx, al
     pop si
     pop cx
