@@ -43,12 +43,12 @@ start:
     mov ax, 4c00h
     int 21h   
   
-; 读入键盘输入部分
+; -----读入键盘输入部分-----
 read proc
-; 从键盘上读取一个输入ascii码到al，并打印到屏幕上
+    ; 从键盘上读取一个输入ascii码到al，并打印到屏幕上
     mov ah, 01h 
     int 21h
-; 如果读入的是esc键，跳转到退出部分
+    ; 如果读入的是esc键，跳转到退出部分
     cmp al, 1bh 
     jz quit
     ; 如果读入回车，播放《牢不可破的联盟》
@@ -60,12 +60,13 @@ read proc
     ret
 read endp
 
+; -----播放音符部分-----
 play proc
     push cx
     push si
-    mov cx, 21 ;设置cx循环21次，因为要比较21个字符
-    mov di, 0  ;设置di存储指向keys数据段的指针
-    mov si, 0  ;设置si存储指向freq数据段的指针
+    mov cx, 21          ;设置cx循环21次，因为要比较21个字符
+    mov di, 0           ;设置di存储指向keys数据段的指针
+    mov si, 0           ;设置si存储指向freq数据段的指针
   ; 判断按下的按键
   choosekey:
     cmp al, ds:keys[di] ; key数据值与读入的键盘码(al)比较    
@@ -75,7 +76,7 @@ play proc
     inc di              ; 否则di+1， si+2
     add si, 2           
     loop choosekey      ; 循环回开头，尝试匹配下一个
-    jmp mainloop           ; 如果输入的是其他字符，重新回到读入部分
+    jmp mainloop        ; 如果输入的是其他字符，重新回到读入部分
   
   ; 输出声音
   output:
@@ -135,20 +136,21 @@ play proc
     ; 空格延时
     delay:
     mov ah, 00h 
-    int 1ah    ; 召唤一次时钟中断（约55ms）
-    mov bp, 1  ; 更改此计数器以改变延时的时间（bp*55ms），约18次为1秒
-    mov bx, dx ; 返回时间计数器的低位，存入bx
+    int 1ah      ; 召唤一次时钟中断（约55ms）
+    mov bp, 1    ; 更改此计数器以改变延时的时间（bp*55ms），约18次为1秒
+    mov bx, dx   ; 返回时间计数器的低位，存入bx
   delaylop2:
     mov ah, 00h
-    int 1ah    ; 再次召唤时钟中断
-    sub dx, bx ; 返回的时钟计数器值减去存储的值,即为调用时钟中断的次数
-    cmp dx, bp ; 如果次数没有到达设定的次数，继续循环
+    int 1ah      ; 再次召唤时钟中断
+    sub dx, bx   ; 返回的时钟计数器值减去存储的值,即为调用时钟中断的次数
+    cmp dx, bp   ; 如果次数没有到达设定的次数，继续循环
     jbe delaylop2
     pop si
     pop cx
     ret
 play endp
 
+; -----播放《牢不可破的联盟》部分-----
 ussr proc
   mov cx, len
   mov si, 0
