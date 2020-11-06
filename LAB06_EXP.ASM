@@ -83,8 +83,8 @@ play proc
     ;初始化8254的2号定时器
     ;dx-端口号,原PC机端口43H，实验箱为283H 
     ;al-控制字,原PC机为0b6h，实验箱为36h（00110110b）
-    mov dx, 43h  ; <==========
-    mov al, 0b6h ; <==========
+    mov dx, 283h  ; <==========
+    mov al, 36h ; <==========
     out dx, al
     ; 定义基准频率：122870H,高四位存在dx中，低四位存在ax中
     mov ax, 2870h
@@ -95,7 +95,7 @@ play proc
 
     ; 将计算结果存入2号计时器的计数常数寄存器端口
     ; 原PC机：42H，实验箱：280H
-    mov dx, 42h ; 定义端口 ; <==========
+    mov dx, 280h ; 定义端口 ; <==========
     out dx, al ;分两次输出到端口，先是低四位al
     mov al, ah ;将高四位转移到al的低四位
     out dx, al ;输出高四位到端口
@@ -103,18 +103,18 @@ play proc
     ; 输出声音：
     ; 输出到实验箱，端口28bh，控制码80h
     mov dx, 28bh
-    mov al, 10000000b
+    mov al, 80b
     out dx, al
-    ; 输出到PC机，端口61h，控制码03h
+    ; 写端口61h，控制码03h
     ; 试验箱，端口288h
-    mov dx, 61h  ; <==========
+    mov dx, 288h  ; <==========
     mov al, 03h
     out dx, al
 
     ; 设置延时
     mov ah, 00h 
     int 1ah    ; 召唤一次时钟中断（约55ms）
-    mov bp, 2  ; 更改此计数器以改变延时的时间（bp*55ms），约18次为1秒
+    mov bp, 4  ; 更改此计数器以改变延时的时间（bp*55ms），约18次为1秒
     mov bx, dx ; 返回时间计数器的低位，存入bx
   delaylop:
     mov ah, 00h
@@ -127,7 +127,7 @@ play proc
     and al, 00h ; 重置控制码为0
     ; 输出到PC机，端口61h，控制码03h
     ; 试验箱，端口288h
-    mov dx, 61h  ; <==========
+    mov dx, 288h  ; <==========
     out dx, al
     pop si
     pop cx
@@ -137,7 +137,7 @@ play proc
     delay:
     mov ah, 00h 
     int 1ah      ; 召唤一次时钟中断（约55ms）
-    mov bp, 1    ; 更改此计数器以改变延时的时间（bp*55ms），约18次为1秒
+    mov bp, 2    ; 更改此计数器以改变延时的时间（bp*55ms），约18次为1秒
     mov bx, dx   ; 返回时间计数器的低位，存入bx
   delaylop2:
     mov ah, 00h
