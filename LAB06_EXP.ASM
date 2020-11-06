@@ -14,9 +14,9 @@ data segment
     len equ $-ussrkeys
 data ends
 
-stack segment stack
+stack1 segment stack
     dw 128 dup(0)
-stack ends
+stack1 ends
 
 code segment
 
